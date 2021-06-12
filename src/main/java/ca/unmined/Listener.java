@@ -1,7 +1,9 @@
 package ca.unmined;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -35,6 +37,13 @@ public class Listener extends ListenerAdapter {
             event.editMessageEmbeds(messageEdit(event)).complete();
 
         }
+    }
+
+    public MessageEmbed messageEdit(ButtonClickEvent event) {
+
+        return new EmbedBuilder().setColor(Color.RED).setTitle("COVID-19 Cases By Graph: ")
+                .setDescription("COVID-19 Rising Per Country By Graph").clearFields().setImage("https://moz.com/cms/_1200x630_crop_center-center_82_none/GuideToLinkBuilding-OG-Title.png?mtime=20210326151847&focal=none&tmtime=20210610115603")
+                .build();
     }
 
 }

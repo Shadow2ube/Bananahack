@@ -49,6 +49,7 @@ public class Covid extends Command implements Component {
     private void getTopCases(MessageReceivedEvent event) {
         EmbedBuilder embedHighCases = new EmbedBuilder();
 
+        embedHighCases.setColor(Color.RED);
         embedHighCases.setTitle("COVID-19 Cases Leaderboard");
         embedHighCases.setDescription("Leaderboards for the countries with the most covid cases");
         embedHighCases.addField("1. " + "Country1", "", false);
@@ -63,6 +64,7 @@ public class Covid extends Command implements Component {
     private void getLowCases(MessageReceivedEvent event) {
         EmbedBuilder embedLowCases = new EmbedBuilder();
 
+        embedLowCases.setColor(Color.RED);
         embedLowCases.setTitle("COVID-19 Cases Leaderboard");
         embedLowCases.setDescription("Leaderboards for the countries with the least covid cases");
         embedLowCases.addField("1. " + "Country1", "", false);
@@ -71,7 +73,7 @@ public class Covid extends Command implements Component {
         embedLowCases.setTimestamp(Instant.now());
         embedLowCases.setFooter("Bot made by Justin and Christian");
 
-        event.getChannel().sendMessage(embedLowCases.build()).queue();
+        event.getChannel().sendMessage(embedLowCases.build()).complete();
     }
 
 
