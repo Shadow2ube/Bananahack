@@ -14,8 +14,12 @@ import org.json.simple.JSONObject;
 import java.awt.*;
 import java.time.Instant;
 
-public class Covid extends Command implements Component {
+public class Covid extends Command {
 
+    public static String mode = "Graph";
+    public static int graphState = 0;
+
+    public static Button Switch = Button.primary("Switch", mode);
 
     public Covid() {
         this.name = "covid";

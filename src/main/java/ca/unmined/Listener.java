@@ -15,7 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
-public class Listener extends ListenerAdapter {
+public class Listener extends ListenerAdapter implements Component {
+
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         super.onReady(event);
@@ -36,9 +37,11 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onButtonClick(ButtonClickEvent event) {
-        if (event.getComponentId().equals("GraphHighCase")) {
-            event.editMessageEmbeds(messageEdit(event)).complete();
-
+        if (event.getComponentId().equals("Switch")) {
+            if (Covid.graphState == 1) Covid.graphState = 0;
+            else Covid.graphState = 1;
+            event.editMessageEmbeds(messageEdit(event, Covid.graphState)).queue();
+            event.editButton(Covid.Switch).queue();
         }
     }
 
