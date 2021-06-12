@@ -4,7 +4,7 @@
 We took inspiration from the current world events and the lack of people's knowledge on COVID-19 data.
 
 ## What it does
-DannyCOVIDO gives up to date worldwide and country based data on the current amount of cases in that region.
+Danny COVIDO gives up to date worldwide and country based data on the current amount of cases in that region.
 
 ## How we built it
 DannyCOVIDO was built in pure java with the use of APIs such as Wolfram Technologies' Wolfram Alpha to create graphs from the data collected as well as Trackcorona.live's api on COVID data from provinces and countries around the world
