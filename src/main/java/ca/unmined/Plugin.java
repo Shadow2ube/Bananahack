@@ -6,6 +6,7 @@ import ca.unmined.util.Task;
 import ca.unmined.util.Util;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.security.auth.login.LoginException;
@@ -22,7 +23,7 @@ public class Plugin {
     public static HashMap<String, Command> ALIASES = new HashMap<>();
 
     public static Timer timer = new Timer();
-    public static JSONObject countryStats;
+    public static JSONArray countryStats;
     public static JSONObject provinceStats;
     public static String b_Prefix = "!";
     public static JDABuilder builder;
@@ -43,8 +44,14 @@ public class Plugin {
                 }
             }
 
-            TimerTask updateStats = new Task(() -> countryStats = Rest.GET("https://www.trackcorona.live/api/countries"));
+            TimerTask updateStats = new Task(() -> {
+                countryStats = (JSONArray) (Rest.GET("https://www.trackcorona.live/api/countries").get("data"));
+                System.out.println(countryStats);
+            });
             timer.schedule(updateStats, 0, 3600000);
+
+            System.out.println(countryStats.get(0));
+            System.out.println(Util.getCountryFromJSON(countryStats, "in"));
 
             builder.build();
 

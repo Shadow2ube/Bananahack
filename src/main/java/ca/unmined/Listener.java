@@ -4,11 +4,11 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
 
 public class Listener extends ListenerAdapter {
     @Override
@@ -32,9 +32,7 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onButtonClick(ButtonClickEvent event) {
         if (event.getComponentId().equals("GraphHighCase")) {
-            Message message = event.getMessage();
-            assert message != null;
-            message.editMessage("hi").queue();
+            event.editMessageEmbeds(messageEdit(event)).complete();
 
         }
     }

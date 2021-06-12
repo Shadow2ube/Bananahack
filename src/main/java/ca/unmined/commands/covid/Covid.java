@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.time.Instant;
 
 public class Covid extends Command implements Component {
@@ -56,8 +57,7 @@ public class Covid extends Command implements Component {
         embedHighCases.setTimestamp(Instant.now());
         embedHighCases.setFooter("Bot made by Justin and Christian");
 
-        event.getChannel().sendMessage(embedHighCases.build()).setActionRow(Button.primary("GraphHighCase", "Graph")).queue();
-        Message test = event.getChannel().sendMessage("yolo").complete();
+        Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(Button.primary("GraphHighCase", "Graph")).complete();
     }
 
     private void getLowCases(MessageReceivedEvent event) {
