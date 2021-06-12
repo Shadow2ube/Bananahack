@@ -1,6 +1,9 @@
 # Made by Christian with the help of https://gitignore.io
 # Generated before hackathon
 
+### Misc ###
+bot.properties
+
 ### Java ###
 # Compiled class file
 *.class
