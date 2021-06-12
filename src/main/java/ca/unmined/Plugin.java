@@ -23,7 +23,7 @@ public class Plugin {
     public static HashMap<String, Command> ALIASES = new HashMap<>();
 
     public static Timer timer = new Timer();
-    public static JSONArray countryStats;
+    public static JSONArray countryStats = new JSONArray();
     public static JSONObject provinceStats;
     public static String b_Prefix = "!";
     public static JDABuilder builder;
@@ -45,13 +45,10 @@ public class Plugin {
             }
 
             TimerTask updateStats = new Task(() -> {
-                countryStats = (JSONArray) (Rest.GET("https://www.trackcorona.live/api/countries").get("data"));
-                System.out.println(countryStats);
+                countryStats = (JSONArray) Rest.GET("https://www.trackcorona.live/api/countries").get("data");
+                System.out.println(Util.getTopCasesByCountry(countryStats, 3));
             });
-            timer.schedule(updateStats, 0, 3600000);
-
-            System.out.println(countryStats.get(0));
-            System.out.println(Util.getCountryFromJSON(countryStats, "in"));
+            timer.schedule(updateStats, 0, 1200000);
 
             builder.build();
 

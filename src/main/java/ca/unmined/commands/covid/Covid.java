@@ -1,16 +1,15 @@
 package ca.unmined.commands.covid;
 
+import ca.unmined.Plugin;
 import ca.unmined.util.Command;
+import ca.unmined.util.Util;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.interactions.components.Component;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import net.dv8tion.jda.api.utils.data.DataObject;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
@@ -30,68 +29,59 @@ public class Covid extends Command implements Component {
 
     @Override
     public boolean execute(MessageReceivedEvent event, String[] args) {
-        if(args.length == 2 && args[0].equalsIgnoreCase("list")) {
+        switch (graphState) {
+            case 0:
+                mode = "Graph";
+                break;
+            case 1:
+                mode = "List";
+                break;
+        }
 
-            if(args[1].equalsIgnoreCase("top")
-                    || args[1].equalsIgnoreCase("t")){
+        if(args.length == 1) {
+            if(args[0].equalsIgnoreCase("top")
+                    || args[0].equalsIgnoreCase("t")){
                 getTopCases(event);
-            }
-            if(args[1].equalsIgnoreCase("low")
-                    || args[1].equalsIgnoreCase("l")) {
+            } else if(args[0].equalsIgnoreCase("low")
+                    || args[0].equalsIgnoreCase("l")) {
                 getLowCases(event);
+            } else if (getCountryCases(event)) {
+
             }
         }
 
         return true;
     }
 
-
     private void getTopCases(MessageReceivedEvent event) {
+        JSONArray a = Util.getTopCasesByCountry(Plugin.countryStats, 3);
+        sendCases(event, "Leaderboards for the countries with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+    }
+
+    private void getLowCases(MessageReceivedEvent event) {
+        JSONArray a = Util.getLowCasesByCountry(Plugin.countryStats, 3);
+        sendCases(event, "Leaderboards for the countries with the lowest covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+    }
+
+    private boolean getCountryCases(MessageReceivedEvent event) {
+        return false;
+    }
+
+    private void sendCases(MessageReceivedEvent event, String description, JSONObject... countries) {
         EmbedBuilder embedHighCases = new EmbedBuilder();
 
         embedHighCases.setColor(Color.RED);
         embedHighCases.setTitle("COVID-19 Cases Leaderboard");
-        embedHighCases.setDescription("Leaderboards for the countries with the most covid cases");
-        embedHighCases.addField("1. " + "Country1", "", false);
-        embedHighCases.addField("2. " + "Country2", "", false);
-        embedHighCases.addField("3. " + "Country3", "", false);
+        embedHighCases.setDescription(description);
+        for (int i = 0; i < countries.length; i++) {
+            embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "cases: " + countries[i].get("confirmed"), false);
+        }
+
         embedHighCases.setTimestamp(Instant.now());
         embedHighCases.setFooter("Bot made by Justin and Christian");
 
-        Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(Button.primary("GraphHighCase", "Graph")).complete();
-    }
-
-    private void getLowCases(MessageReceivedEvent event) {
-        EmbedBuilder embedLowCases = new EmbedBuilder();
-
-        embedLowCases.setColor(Color.RED);
-        embedLowCases.setTitle("COVID-19 Cases Leaderboard");
-        embedLowCases.setDescription("Leaderboards for the countries with the least covid cases");
-        embedLowCases.addField("1. " + "Country1", "", false);
-        embedLowCases.addField("2. " + "Country2", "", false);
-        embedLowCases.addField("3. " + "Country3", "", false);
-        embedLowCases.setTimestamp(Instant.now());
-        embedLowCases.setFooter("Bot made by Justin and Christian");
-
-        event.getChannel().sendMessage(embedLowCases.build()).complete();
-    }
-
-
-    @NotNull
-    @Override
-    public Type getType() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public String getId() {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public DataObject toData() {
-        return null;
+        Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(
+                Button.primary("7Day", "7 Day View"), Button.primary("30Day", "30 Day View"), Button.primary("1Year", "Year View"), Switch
+                ).complete();
     }
 }
