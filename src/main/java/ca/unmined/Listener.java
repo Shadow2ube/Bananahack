@@ -74,7 +74,7 @@ public class Listener extends ListenerAdapter implements Component {
         switch (graphState) {
             // List
             case 0:
-                Covid.mode = "Graph";
+                Covid.mode = "International Graph";
                 return oldmsg;
             // Graph
             case 1:
@@ -82,7 +82,7 @@ public class Listener extends ListenerAdapter implements Component {
                 return new EmbedBuilder()
                         .setColor(Color.RED)
                         .setTitle("COVID-19 Cases By Graph:")
-                        .setDescription("COVID-19 Rising Per Country By Graph")
+                        .setDescription("COVID-19 Confirmed Cases Internationally By Graph")
                         .clearFields()
                         .setImage(Plugin.allTimeGraph)
                         .setTimestamp(Instant.now())
@@ -91,7 +91,7 @@ public class Listener extends ListenerAdapter implements Component {
         }
 
         return new EmbedBuilder().setColor(Color.RED).setTitle("COVID-19 Cases By Graph:")
-                .setDescription("COVID-19 Rising Per Country By Graph")
+                .setDescription("COVID-19 Confirmed Cases Internationally By Graph")
                 .clearFields()
                 .setImage(Plugin.allTimeGraph)
                 .setTimestamp(Instant.now())

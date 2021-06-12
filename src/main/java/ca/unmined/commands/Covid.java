@@ -43,7 +43,7 @@ public class Covid extends Command {
     public boolean execute(MessageReceivedEvent event, String[] args) {
         switch (graphState) {
             case 0:
-                mode = "Graph";
+                mode = "International Graph";
                 break;
             case 1:
                 mode = "List";
@@ -99,7 +99,7 @@ public class Covid extends Command {
         embedHighCases.setTitle("COVID-19 Cases Leaderboard");
         embedHighCases.setDescription(description);
         for (int i = 0; i < countries.length; i++) {
-            embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "cases: " + countries[i].get("confirmed"), false);
+            embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "Cases: " + countries[i].get("confirmed"), false);
         }
 
         embedHighCases.setTimestamp(Instant.now());
@@ -115,10 +115,10 @@ public class Covid extends Command {
         EmbedBuilder embedHighCases = new EmbedBuilder();
 
         embedHighCases.setColor(Color.RED);
-        embedHighCases.setTitle(country.get("location") + " case Leaderboard");
-        embedHighCases.setDescription(description + "\n" + country.get("confirmed"));
+        embedHighCases.setTitle(country.get("location") + "'s COVID-19 Case Leaderboard");
+        embedHighCases.setDescription(description + "\n" + country.get("location") + "'s Total Case Count is: " + country.get("confirmed"));
         for (int i = 0; i < countries.length; i++) {
-            embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "cases: " + countries[i].get("confirmed"), false);
+            embedHighCases.addField((i + 1) + ". " + ((JSONObject) countries[i]).get("location"), "Cases: " + ((JSONObject) countries[i]).get("confirmed"), false);
         }
 
         embedHighCases.setTimestamp(Instant.now());
