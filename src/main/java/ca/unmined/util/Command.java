@@ -7,6 +7,7 @@ public abstract class Command {
 
     public String name;
     public String[] aliases;
+    public String[][] children;
     public Permission[] permissions;
     public String description;
 

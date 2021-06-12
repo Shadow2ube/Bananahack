@@ -10,27 +10,31 @@ import java.io.IOException;
 import java.util.*;
 
 public class Util {
-    public static void RegisterAllCommands() throws IOException {
-        ClassPath cp = ClassPath.from(Util.class.getClassLoader());
-        cp.getTopLevelClassesRecursive("ca.unmined.commands").forEach(info -> {
-            try {
-                Class<?> c = Class.forName(info.getName());
+    public static void RegisterAllCommands() {
+        try {
+            ClassPath cp = ClassPath.from(Util.class.getClassLoader());
+            cp.getTopLevelClassesRecursive("ca.unmined.commands").forEach(info -> {
+                try {
+                    Class<?> c = Class.forName(info.getName());
 
-                Object o = c.newInstance();
-                if (o instanceof Command) {
-                    Command command = (Command) o;
-                    Plugin.COMMANDS.put(command.name.toLowerCase(), command);
+                    Object o = c.newInstance();
+                    if (o instanceof Command) {
+                        Command command = (Command) o;
+                        Plugin.COMMANDS.put(command.name.toLowerCase(), command);
+                    }
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
                 }
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-                e.printStackTrace();
-            }
-        });
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static JSONObject getCountryFromJSON(JSONArray countries, String name) {
         for (Object o : countries) {
             JSONObject country = (JSONObject) o;
-            if (country.get("location") == name || country.get("country_code") == name) {
+            if (country.get("location").equals(name) || country.get("country_code").equals(name)) {
                 return country;
             }
         }
@@ -50,15 +54,19 @@ public class Util {
         for (Object state : states) {
             JSONObject o = (JSONObject) state;
             if (o.get("country_code").equals(countryCode)) {
-                System.out.println(o);
                 p.add(o);
             }
         }
-        System.out.println();
-        System.out.println(p);
         return getTopJsonArray(p, amount);
     }
-    public static JSONArray getLowCasesByState(JSONArray states, int amount) {
+    public static JSONArray getLowCasesByState(JSONArray states, String countryCode, int amount) {
+        JSONArray p = new JSONArray();
+        for (Object state : states) {
+            JSONObject o = (JSONObject) state;
+            if (o.get("country_code").equals(countryCode)) {
+                p.add(o);
+            }
+        }
         return getLowJsonArray(states, amount);
     }
 

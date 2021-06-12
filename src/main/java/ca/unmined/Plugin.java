@@ -4,10 +4,12 @@ import ca.unmined.util.Command;
 import ca.unmined.util.Rest;
 import ca.unmined.util.Task;
 import ca.unmined.util.Util;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.internal.JDAImpl;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
@@ -27,6 +29,7 @@ public class Plugin {
     public static JSONArray stateStats = new JSONArray();
     public static String b_Prefix = "!";
     public static JDABuilder builder;
+    public static JDAImpl jda;
 
     public static void main(String[] args) {
         try {
@@ -52,7 +55,7 @@ public class Plugin {
 
             builder.build();
 
-        } catch (LoginException | IOException e) {
+        } catch (LoginException e) {
             e.printStackTrace();
         }
     }

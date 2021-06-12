@@ -1,4 +1,4 @@
-package ca.unmined.commands.covid;
+package ca.unmined.commands;
 
 import ca.unmined.Plugin;
 import ca.unmined.util.Command;
@@ -13,19 +13,25 @@ import org.json.simple.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
+import java.util.HashMap;
 
 public class Covid extends Command {
 
     public static String mode = "Graph";
     public static int graphState = 0;
 
-    public static Button Switch = Button.primary("Switch", mode);
 
     public Covid() {
         this.name = "covid";
         this.aliases = new String[] {
                 "c",
                 "i"
+        };
+        this.children = new String[][] {
+                {"top/t", "COVID Countries with highest cases"},
+                {"low/l", "COVID Countries with lowest cases"},
+                {"top/t {country_code}", "COVID States/Provinces with highest cases"},
+                {"low/l {country_code}", "COVID States/Provinces with lowest cases"}
         };
         this.permissions = new Permission[0];
         this.description = "Get COVID-19 data from different countries";
@@ -52,7 +58,10 @@ public class Covid extends Command {
             }
         } else if (args.length == 2) {
             if ((args[0].equalsIgnoreCase("top") || args[0].equalsIgnoreCase("t"))
-                    && getCountryTopCases(event, args[1])) {
+                    && !getCountryTopCases(event, args[1])) {
+                event.getChannel().sendMessage("Invalid country").queue();
+            } else if ((args[0].equalsIgnoreCase("low") || args[0].equalsIgnoreCase("l"))
+                    && !getCountryTopCases(event, args[1])) {
                 event.getChannel().sendMessage("Invalid country").queue();
             }
         }
@@ -71,11 +80,11 @@ public class Covid extends Command {
     }
 
     private boolean getCountryTopCases(MessageReceivedEvent event, String countryCode) {
-        System.out.println(countryCode);
         JSONArray a = Util.getTopCasesByState(Plugin.stateStats, countryCode, 3);
+        JSONObject c = Util.getCountryFromJSON(Plugin.countryStats, countryCode);
         if (a.size() == 0)
             return false;
-        sendCases(event, "Leaderboard for the top Provinces/States with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        sendCases(event, c, "Leaderboard for the top Provinces/States with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
         return true;
     }
 
@@ -87,8 +96,6 @@ public class Covid extends Command {
         embedHighCases.setDescription(description);
         for (int i = 0; i < countries.length; i++) {
             embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "cases: " + countries[i].get("confirmed"), false);
-            embedHighCases.addField(("test: Cases 10212\ntest: Cases 11212\ntest: Cases 10212\ntest: Cases 11212\n"), "", false);
-
         }
 
         embedHighCases.setTimestamp(Instant.now());
@@ -97,5 +104,24 @@ public class Covid extends Command {
         Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(
                 Button.primary("7Day", "7 Day View"), Button.primary("30Day", "30 Day View"), Button.primary("1Year", "Year View"), Switch
                 ).complete();
+    }
+    private void sendCases(MessageReceivedEvent event, JSONObject country, String description, JSONObject... countries) {
+        EmbedBuilder embedHighCases = new EmbedBuilder();
+
+        embedHighCases.setColor(Color.RED);
+        embedHighCases.setTitle(country.get("location") + " case Leaderboard");
+        embedHighCases.setDescription(description + "\n" + country.get("confirmed"));
+        for (int i = 0; i < countries.length; i++) {
+            embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "cases: " + countries[i].get("confirmed"), false);
+        }
+
+        embedHighCases.setTimestamp(Instant.now());
+        embedHighCases.setFooter("Command Executed By: " + event.getAuthor().getIdLong());
+
+        Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(
+                 Button.primary("Switch", mode)
+        ).complete();
+
+        sentByWho.put(event.getAuthor().getIdLong(), e.getIdLong());
     }
 }

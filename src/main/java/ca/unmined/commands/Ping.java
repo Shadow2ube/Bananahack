@@ -22,7 +22,6 @@ public class Ping extends Command {
     public boolean execute(MessageReceivedEvent event, String[] args) {
         event.getChannel().sendMessage("Pong.").queue();
 
-        System.out.println(Plugin.countryStats);
         return true;
     }
 }
