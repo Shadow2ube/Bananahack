@@ -19,4 +19,16 @@ dependencies {
     /* ClassPaths */  implementation 'org.reflections:reflections:0.9.10'
     /* JSON */        implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     /* JSoup */       implementation 'org.jsoup:jsoup:1.13.1'
+    /* Log4j */       implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ca.unmined.Plugin'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }

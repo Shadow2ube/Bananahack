@@ -17,8 +17,6 @@ import java.util.HashMap;
 
 public class Covid extends Command {
 
-    public static HashMap<Long, Long> sentByWho = new HashMap<>();
-
 
     public static String mode = "Graph";
     public static int graphState = 0;
@@ -72,13 +70,35 @@ public class Covid extends Command {
     }
 
     private void getTopCases(MessageReceivedEvent event) {
-        JSONArray a = Util.getTopCasesByCountry(Plugin.countryStats, 3);
-        sendCases(event, "Leaderboard for the countries with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        JSONArray a = Util.getTopCasesByCountry(Plugin.countryStats, 10);
+        sendCases(event, "Leaderboard for the countries with the top covid cases",
+                (JSONObject) a.get(0),
+                (JSONObject) a.get(1),
+                (JSONObject) a.get(2),
+                (JSONObject) a.get(3),
+                (JSONObject) a.get(4),
+                (JSONObject) a.get(5),
+                (JSONObject) a.get(6),
+                (JSONObject) a.get(7),
+                (JSONObject) a.get(8),
+                (JSONObject) a.get(9)
+        );
     }
 
     private void getLowCases(MessageReceivedEvent event) {
-        JSONArray a = Util.getLowCasesByCountry(Plugin.countryStats, 3);
-        sendCases(event, "Leaderboard for the countries with the lowest covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        JSONArray a = Util.getLowCasesByCountry(Plugin.countryStats, 10);
+        sendCases(event, "Leaderboard for the countries with the lowest covid cases",
+                (JSONObject) a.get(0),
+                (JSONObject) a.get(1),
+                (JSONObject) a.get(2),
+                (JSONObject) a.get(3),
+                (JSONObject) a.get(4),
+                (JSONObject) a.get(5),
+                (JSONObject) a.get(6),
+                (JSONObject) a.get(7),
+                (JSONObject) a.get(8),
+                (JSONObject) a.get(9)
+        );
     }
 
     private boolean getCountryTopCases(MessageReceivedEvent event, String countryCode) {
@@ -108,8 +128,6 @@ public class Covid extends Command {
         Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(
                 Button.primary("Switch", mode)
                 ).complete();
-
-        sentByWho.put(event.getAuthor().getIdLong(), e.getIdLong());
     }
     private void sendCases(MessageReceivedEvent event, JSONObject country, String description, Object... countries) {
         EmbedBuilder embedHighCases = new EmbedBuilder();
@@ -124,8 +142,6 @@ public class Covid extends Command {
         embedHighCases.setTimestamp(Instant.now());
         embedHighCases.setFooter("Command Executed By: " + event.getAuthor().getIdLong());
 
-        Message e = event.getChannel().sendMessage(embedHighCases.build()).complete();
-
-        sentByWho.put(event.getAuthor().getIdLong(), e.getIdLong());
+        event.getChannel().sendMessage(embedHighCases.build()).queue();
     }
 }
