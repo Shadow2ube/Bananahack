@@ -1,19 +1,18 @@
 package ca.unmined;
 
 import ca.unmined.util.Command;
+import ca.unmined.util.Rest;
 import ca.unmined.util.Task;
 import ca.unmined.util.Util;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import org.json.simple.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Plugin {
 
@@ -22,12 +21,15 @@ public class Plugin {
     public static HashMap<String, Command> COMMANDS = new HashMap<>();
     public static HashMap<String, Command> ALIASES = new HashMap<>();
 
+    public static Timer timer = new Timer();
+    public static JSONObject countryStats;
+    public static JSONObject provinceStats;
     public static String b_Prefix = "!";
     public static JDABuilder builder;
 
     public static void main(String[] args) {
         try {
-            builder = JDABuilder.createDefault(getProperty("token", "C:\\Users\\chris\\Documents\\Bananahack\\src\\main\\java\\ca\\unmined\\bot.properties"));
+            builder = JDABuilder.createDefault(getProperty("token", "bot.properties"));
             builder.addEventListeners(new Listener());
 
             Util.RegisterAllCommands();
@@ -41,18 +43,10 @@ public class Plugin {
                 }
             }
 
-            builder.build();
+            TimerTask updateStats = new Task(() -> countryStats = Rest.GET("https://www.trackcorona.live/api/countries"));
+            timer.schedule(updateStats, 0, 3600000);
 
-            Timer timer = new Timer();
-            TimerTask sleep = new Task(() -> {
-                System.out.println("U - U -zzzzz");
-                System.out.println("U _ U -zzzzz");
-                System.out.println("U - U -zzzzz");
-                System.out.println("U _ U -zzzzz");
-                System.out.println("O o O -oh");
-                System.out.println("- _ - -no");
-            });
-//            timer.schedule(sleep,);
+            builder.build();
 
         } catch (LoginException | IOException e) {
             e.printStackTrace();

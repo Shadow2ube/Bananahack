@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.time.Instant;
-import java.util.Arrays;
 
 public class Covid extends Command {
 
@@ -24,7 +23,8 @@ public class Covid extends Command {
     public boolean execute(MessageReceivedEvent event, String[] args) {
         if(args.length == 2 && args[0].equalsIgnoreCase("list")) {
 
-            if(args[1].equalsIgnoreCase("top") || args[1].equalsIgnoreCase("t")){
+            if(args[1].equalsIgnoreCase("top")
+                    || args[1].equalsIgnoreCase("t")){
                 getTopCases(event);
             }
             if(args[1].equalsIgnoreCase("low") || args[1].equalsIgnoreCase("l")){
@@ -55,6 +55,21 @@ public class Covid extends Command {
     private void getLowCases(MessageReceivedEvent event) {
     }
 
+    @NotNull
+    @Override
+    public Type getType() {
+        return null;
+    }
 
+    @Nullable
+    @Override
+    public String getId() {
+        return null;
+    }
 
+    @NotNull
+    @Override
+    public DataObject toData() {
+        return null;
+    }
 }
