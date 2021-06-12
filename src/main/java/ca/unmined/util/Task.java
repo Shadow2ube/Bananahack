@@ -1,7 +1,6 @@
 package ca.unmined.util;
 
 import java.util.TimerTask;
-import java.util.function.Predicate;
 
 public class Task extends TimerTask {
 

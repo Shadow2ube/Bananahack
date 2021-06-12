@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.HashMap;
 
 public class Covid extends Command {
 
