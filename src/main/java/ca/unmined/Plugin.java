@@ -24,7 +24,7 @@ public class Plugin {
 
     public static Timer timer = new Timer();
     public static JSONArray countryStats = new JSONArray();
-    public static JSONObject provinceStats;
+    public static JSONArray stateStats = new JSONArray();
     public static String b_Prefix = "!";
     public static JDABuilder builder;
 
@@ -46,7 +46,7 @@ public class Plugin {
 
             TimerTask updateStats = new Task(() -> {
                 countryStats = (JSONArray) Rest.GET("https://www.trackcorona.live/api/countries").get("data");
-                System.out.println(Util.getTopCasesByCountry(countryStats, 3));
+                stateStats = (JSONArray) Rest.GET("https://www.trackcorona.live/api/provinces").get("data");
             });
             timer.schedule(updateStats, 0, 1200000);
 

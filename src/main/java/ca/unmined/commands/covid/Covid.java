@@ -42,15 +42,18 @@ public class Covid extends Command {
                 break;
         }
 
-        if(args.length == 1) {
-            if(args[0].equalsIgnoreCase("top")
-                    || args[0].equalsIgnoreCase("t")){
+        if (args.length == 1) {
+            if (args[0].equalsIgnoreCase("top")
+                    || args[0].equalsIgnoreCase("t")) {
                 getTopCases(event);
-            } else if(args[0].equalsIgnoreCase("low")
+            } else if (args[0].equalsIgnoreCase("low")
                     || args[0].equalsIgnoreCase("l")) {
                 getLowCases(event);
-            } else if (getCountryCases(event)) {
-
+            }
+        } else if (args.length == 2) {
+            if ((args[0].equalsIgnoreCase("top") || args[0].equalsIgnoreCase("t"))
+                    && getCountryTopCases(event, args[1])) {
+                event.getChannel().sendMessage("Invalid country").queue();
             }
         }
 
@@ -59,16 +62,21 @@ public class Covid extends Command {
 
     private void getTopCases(MessageReceivedEvent event) {
         JSONArray a = Util.getTopCasesByCountry(Plugin.countryStats, 3);
-        sendCases(event, "Leaderboards for the countries with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        sendCases(event, "Leaderboard for the countries with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
     }
 
     private void getLowCases(MessageReceivedEvent event) {
         JSONArray a = Util.getLowCasesByCountry(Plugin.countryStats, 3);
-        sendCases(event, "Leaderboards for the countries with the lowest covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        sendCases(event, "Leaderboard for the countries with the lowest covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
     }
 
-    private boolean getCountryCases(MessageReceivedEvent event) {
-        return false;
+    private boolean getCountryTopCases(MessageReceivedEvent event, String countryCode) {
+        System.out.println(countryCode);
+        JSONArray a = Util.getTopCasesByState(Plugin.stateStats, countryCode, 3);
+        if (a.size() == 0)
+            return false;
+        sendCases(event, "Leaderboard for the top Provinces/States with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        return true;
     }
 
     private void sendCases(MessageReceivedEvent event, String description, JSONObject... countries) {

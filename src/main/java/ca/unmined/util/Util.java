@@ -39,9 +39,33 @@ public class Util {
     }
 
     public static JSONArray getTopCasesByCountry(JSONArray countries, int amount) {
+        return getTopJsonArray(countries, amount);
+    }
+    public static JSONArray getLowCasesByCountry(JSONArray countries, int amount) {
+        return getLowJsonArray(countries, amount);
+    }
+
+    public static JSONArray getTopCasesByState(JSONArray states, String countryCode, int amount) {
+        JSONArray p = new JSONArray();
+        for (Object state : states) {
+            JSONObject o = (JSONObject) state;
+            if (o.get("country_code").equals(countryCode)) {
+                System.out.println(o);
+                p.add(o);
+            }
+        }
+        System.out.println();
+        System.out.println(p);
+        return getTopJsonArray(p, amount);
+    }
+    public static JSONArray getLowCasesByState(JSONArray states, int amount) {
+        return getLowJsonArray(states, amount);
+    }
+
+    private static JSONArray getTopJsonArray(JSONArray states, int amount) {
         List<JSONObject> jsonValues = new ArrayList<>();
-        for (Object country : countries) {
-            jsonValues.add((JSONObject) country);
+        for (Object state : states) {
+            jsonValues.add((JSONObject) state);
         }
 
         jsonValues.sort(new Comparator<JSONObject>() {
@@ -60,17 +84,16 @@ public class Util {
         });
 
         JSONArray out = new JSONArray();
-        for (int i = 0; i < countries.size() && i <= amount; i++) {
+        for (int i = 0; i < states.size() && i <= amount; i++) {
             out.add(jsonValues.get(i));
         }
 
         return out;
     }
-
-    public static JSONArray getLowCasesByCountry(JSONArray countries, int amount) {
+    private static JSONArray getLowJsonArray(JSONArray states, int amount) {
         List<JSONObject> jsonValues = new ArrayList<>();
-        for (Object country : countries) {
-            jsonValues.add((JSONObject) country);
+        for (Object state : states) {
+            jsonValues.add((JSONObject) state);
         }
 
         jsonValues.sort(new Comparator<JSONObject>() {
@@ -89,7 +112,7 @@ public class Util {
         });
 
         JSONArray out = new JSONArray();
-        for (int i = 0; i < countries.size() && i <= amount; i++) {
+        for (int i = 0; i < states.size() && i <= amount; i++) {
             out.add(jsonValues.get(i));
         }
 
