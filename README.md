@@ -1,4 +1,4 @@
-#Danny COVIDO
+# Danny COVIDO
 
 ## Inspiration
 We took inspiration from the current world events and the lack of people's knowledge on COVID-19 data.
