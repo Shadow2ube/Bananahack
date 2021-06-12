@@ -20,7 +20,8 @@ public class Ping extends Command {
 
     @Override
     public boolean execute(MessageReceivedEvent event, String[] args) {
-        event.getChannel().sendMessage("Pong...").queue();
+        event.getChannel().sendMessage("Pong.").queue();
+
         System.out.println(Plugin.countryStats);
         return true;
     }

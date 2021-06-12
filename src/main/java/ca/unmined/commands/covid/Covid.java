@@ -87,6 +87,8 @@ public class Covid extends Command {
         embedHighCases.setDescription(description);
         for (int i = 0; i < countries.length; i++) {
             embedHighCases.addField((i + 1) + ". " + countries[i].get("location"), "cases: " + countries[i].get("confirmed"), false);
+            embedHighCases.addField(("test: Cases 10212\ntest: Cases 11212\ntest: Cases 10212\ntest: Cases 11212\n"), "", false);
+
         }
 
         embedHighCases.setTimestamp(Instant.now());
