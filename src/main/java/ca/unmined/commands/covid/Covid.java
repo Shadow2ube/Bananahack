@@ -3,11 +3,19 @@ package ca.unmined.commands.covid;
 import ca.unmined.util.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.Component;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.utils.data.DataObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 
-public class Covid extends Command {
+public class Covid extends Command implements Component {
+
 
     public Covid() {
         this.name = "covid";
@@ -27,7 +35,8 @@ public class Covid extends Command {
                     || args[1].equalsIgnoreCase("t")){
                 getTopCases(event);
             }
-            if(args[1].equalsIgnoreCase("low") || args[1].equalsIgnoreCase("l")){
+            if(args[1].equalsIgnoreCase("low")
+                    || args[1].equalsIgnoreCase("l")) {
                 getLowCases(event);
             }
         }
@@ -37,23 +46,34 @@ public class Covid extends Command {
 
 
     private void getTopCases(MessageReceivedEvent event) {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("COVID-19 Cases Leaderboard");
+        EmbedBuilder embedHighCases = new EmbedBuilder();
 
-        embed.setDescription("Leaderboards for the countries with the most covid cases");
+        embedHighCases.setTitle("COVID-19 Cases Leaderboard");
+        embedHighCases.setDescription("Leaderboards for the countries with the most covid cases");
+        embedHighCases.addField("1. " + "Country1", "", false);
+        embedHighCases.addField("2. " + "Country2", "", false);
+        embedHighCases.addField("3. " + "Country3", "", false);
+        embedHighCases.setTimestamp(Instant.now());
+        embedHighCases.setFooter("Bot made by Justin and Christian");
 
-        embed.addField("1. " + "Country1", "", false);
-        embed.addField("2. " + "Country2", "", false);
-        embed.addField("3. " + "Country3", "", false);
-        embed.setTimestamp(Instant.now());
-        embed.setFooter("Bot made by Justin and Christian");
-
-        event.getChannel().sendMessage(embed.build()).queue();
-
+        event.getChannel().sendMessage(embedHighCases.build()).setActionRow(Button.primary("GraphHighCase", "Graph")).queue();
+        Message test = event.getChannel().sendMessage("yolo").complete();
     }
 
     private void getLowCases(MessageReceivedEvent event) {
+        EmbedBuilder embedLowCases = new EmbedBuilder();
+
+        embedLowCases.setTitle("COVID-19 Cases Leaderboard");
+        embedLowCases.setDescription("Leaderboards for the countries with the least covid cases");
+        embedLowCases.addField("1. " + "Country1", "", false);
+        embedLowCases.addField("2. " + "Country2", "", false);
+        embedLowCases.addField("3. " + "Country3", "", false);
+        embedLowCases.setTimestamp(Instant.now());
+        embedLowCases.setFooter("Bot made by Justin and Christian");
+
+        event.getChannel().sendMessage(embedLowCases.build()).queue();
     }
+
 
     @NotNull
     @Override

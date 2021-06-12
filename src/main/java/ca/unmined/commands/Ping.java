@@ -19,7 +19,8 @@ public class Ping extends Command {
 
     @Override
     public boolean execute(MessageReceivedEvent event, String[] args) {
-        event.getChannel().sendMessage("pong").queue();
+        event.getChannel().sendMessage("Pong...").queue();
+
         return true;
     }
 }
