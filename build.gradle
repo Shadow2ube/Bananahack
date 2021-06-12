@@ -15,6 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.dv8tion:JDA:4.3.0_277'
-    implementation 'org.reflections:reflections:0.9.10'
+    /* Discord api */ implementation 'net.dv8tion:JDA:4.3.0_277'
+    /* ClassPaths */ implementation 'org.reflections:reflections:0.9.10'
+    /* JSON */ implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }

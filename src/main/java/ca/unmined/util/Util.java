@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Util {
     public static void RegisterAllCommands() throws IOException {
         ClassPath cp = ClassPath.from(Util.class.getClassLoader());
-        cp.getTopLevelClasses("ca.unmined.commands").forEach(info -> {
+        cp.getTopLevelClassesRecursive("ca.unmined.commands").forEach(info -> {
             try {
                 Class<?> c = Class.forName(info.getName());
 

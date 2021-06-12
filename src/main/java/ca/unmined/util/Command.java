@@ -12,6 +12,6 @@ public abstract class Command {
 
     public Command() { }
 
-    public abstract boolean execute(MessageReceivedEvent event);
+    public abstract boolean execute(MessageReceivedEvent event, String[] args);
 
 }
