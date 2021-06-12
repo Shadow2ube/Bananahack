@@ -75,7 +75,7 @@ public class Listener extends ListenerAdapter implements Component {
             // List
             case 0:
                 Covid.mode = "Graph";
-                break;
+                return oldmsg;
             // Graph
             case 1:
                 Covid.mode = "List";
@@ -91,7 +91,11 @@ public class Listener extends ListenerAdapter implements Component {
         }
 
         return new EmbedBuilder().setColor(Color.RED).setTitle("COVID-19 Cases By Graph:")
-                .setDescription("COVID-19 Rising Per Country By Graph").clearFields().setImage("https://moz.com/cms/_1200x630_crop_center-center_82_none/GuideToLinkBuilding-OG-Title.png?mtime=20210326151847&focal=none&tmtime=20210610115603")
+                .setDescription("COVID-19 Rising Per Country By Graph")
+                .clearFields()
+                .setImage("https://moz.com/cms/_1200x630_crop_center-center_82_none/GuideToLinkBuilding-OG-Title.png?mtime=20210326151847&focal=none&tmtime=20210610115603")
+                .setTimestamp(Instant.now())
+                .setFooter("Command Executed By: " + event.getUser().getIdLong())
                 .build();
     }
 

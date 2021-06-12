@@ -17,8 +17,12 @@ import java.util.HashMap;
 
 public class Covid extends Command {
 
+    public static HashMap<Long, Long> sentByWho = new HashMap<>();
+
+
     public static String mode = "Graph";
     public static int graphState = 0;
+
 
 
     public Covid() {
@@ -88,7 +92,9 @@ public class Covid extends Command {
         return true;
     }
 
+
     private void sendCases(MessageReceivedEvent event, String description, JSONObject... countries) {
+
         EmbedBuilder embedHighCases = new EmbedBuilder();
 
         embedHighCases.setColor(Color.RED);
@@ -99,11 +105,12 @@ public class Covid extends Command {
         }
 
         embedHighCases.setTimestamp(Instant.now());
-        embedHighCases.setFooter("Bot made by Justin and Christian");
+        embedHighCases.setFooter("Command Executed By: " + event.getAuthor().getIdLong());
 
         Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(
-                Button.primary("7Day", "7 Day View"), Button.primary("30Day", "30 Day View"), Button.primary("1Year", "Year View"), Switch
+                Button.primary("Switch", mode)
                 ).complete();
+
     }
     private void sendCases(MessageReceivedEvent event, JSONObject country, String description, JSONObject... countries) {
         EmbedBuilder embedHighCases = new EmbedBuilder();
