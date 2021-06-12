@@ -1,6 +1,6 @@
 package ca.unmined;
 
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -14,10 +14,14 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        Message message = event.getMessage();
 
-        if (message.getContentRaw().equalsIgnoreCase("ping")) {
-            event.getChannel().sendMessage("pong").queue();
+        if (event.getAuthor().isBot()
+                || event.isWebhookMessage()
+                || !event.getMessage().getContentRaw().startsWith(Plugin.b_Prefix)) {
+            return;
+        }
+        if (event.getChannelType().equals(ChannelType.TEXT)) {
+            Plugin.execute(event);
         }
     }
 }
