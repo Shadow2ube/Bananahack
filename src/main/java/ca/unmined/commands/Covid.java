@@ -23,8 +23,6 @@ public class Covid extends Command {
     public static String mode = "Graph";
     public static int graphState = 0;
 
-
-
     public Covid() {
         this.name = "covid";
         this.aliases = new String[] {
@@ -35,7 +33,7 @@ public class Covid extends Command {
                 {"top/t", "COVID Countries with highest cases"},
                 {"low/l", "COVID Countries with lowest cases"},
                 {"top/t {country_code}", "COVID States/Provinces with highest cases"},
-                {"low/l {country_code}", "COVID States/Provinces with lowest cases"}
+//                {"low/l {country_code}", "COVID States/Provinces with lowest cases"}
         };
         this.permissions = new Permission[0];
         this.description = "Get COVID-19 data from different countries";
@@ -84,14 +82,14 @@ public class Covid extends Command {
     }
 
     private boolean getCountryTopCases(MessageReceivedEvent event, String countryCode) {
-        JSONArray a = Util.getTopCasesByState(Plugin.stateStats, countryCode, 3);
+        JSONArray a = Util.getTopCasesByState(Plugin.stateStats, countryCode, -1);
         JSONObject c = Util.getCountryFromJSON(Plugin.countryStats, countryCode);
+        System.out.println(a);
         if (a.size() == 0)
             return false;
-        sendCases(event, c, "Leaderboard for the top Provinces/States with the top covid cases", (JSONObject) a.get(0), (JSONObject) a.get(1), (JSONObject) a.get(2));
+        sendCases(event, c, "Leaderboard for the top Provinces/States with the top covid cases", a.toArray(new Object[0]));
         return true;
     }
-
 
     private void sendCases(MessageReceivedEvent event, String description, JSONObject... countries) {
 
@@ -111,8 +109,9 @@ public class Covid extends Command {
                 Button.primary("Switch", mode)
                 ).complete();
 
+        sentByWho.put(event.getAuthor().getIdLong(), e.getIdLong());
     }
-    private void sendCases(MessageReceivedEvent event, JSONObject country, String description, JSONObject... countries) {
+    private void sendCases(MessageReceivedEvent event, JSONObject country, String description, Object... countries) {
         EmbedBuilder embedHighCases = new EmbedBuilder();
 
         embedHighCases.setColor(Color.RED);
@@ -125,9 +124,7 @@ public class Covid extends Command {
         embedHighCases.setTimestamp(Instant.now());
         embedHighCases.setFooter("Command Executed By: " + event.getAuthor().getIdLong());
 
-        Message e = event.getChannel().sendMessage(embedHighCases.build()).setActionRow(
-                 Button.primary("Switch", mode)
-        ).complete();
+        Message e = event.getChannel().sendMessage(embedHighCases.build()).complete();
 
         sentByWho.put(event.getAuthor().getIdLong(), e.getIdLong());
     }

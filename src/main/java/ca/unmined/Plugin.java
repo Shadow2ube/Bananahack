@@ -1,13 +1,8 @@
 package ca.unmined;
 
-import ca.unmined.util.Command;
-import ca.unmined.util.Rest;
-import ca.unmined.util.Task;
-import ca.unmined.util.Util;
-import net.dv8tion.jda.api.JDA;
+import ca.unmined.util.*;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.internal.JDAImpl;
 import org.json.simple.JSONArray;
 
@@ -24,12 +19,15 @@ public class Plugin {
     public static HashMap<String, Command> COMMANDS = new HashMap<>();
     public static HashMap<String, Command> ALIASES = new HashMap<>();
 
+    public static String wolfram;
     public static Timer timer = new Timer();
-    public static JSONArray countryStats = new JSONArray();
-    public static JSONArray stateStats = new JSONArray();
     public static String b_Prefix = "!";
     public static JDABuilder builder;
-    public static JDAImpl jda;
+
+    public static JSONArray countryStats = new JSONArray();
+    public static JSONArray stateStats = new JSONArray();
+    public static String allTimeGraph;
+    public static TreeMap<Long, Long> allTimeCases;
 
     public static void main(String[] args) {
         try {
@@ -37,6 +35,7 @@ public class Plugin {
             builder.addEventListeners(new Listener());
 
             Util.RegisterAllCommands();
+            wolfram = "http://api.wolframalpha.com/v2/query?appid=" + properties.get("appId");
 
             // Get command aliases
             for (Command command : COMMANDS.values()) {
@@ -50,8 +49,10 @@ public class Plugin {
             TimerTask updateStats = new Task(() -> {
                 countryStats = (JSONArray) Rest.GET("https://www.trackcorona.live/api/countries").get("data");
                 stateStats = (JSONArray) Rest.GET("https://www.trackcorona.live/api/provinces").get("data");
+                allTimeCases = Rest.CSV("https://raw.githubusercontent.com/datasets/covid-19/main/data/worldwide-aggregate.csv");
+                allTimeGraph = Xml.GET((wolfram + "&input=quadratic%20fit%20" + Util.graph(allTimeCases)));
             });
-            timer.schedule(updateStats, 0, 1200000);
+            timer.schedule(updateStats, 0, 7200000); // Index once every 2 hours
 
             builder.build();
 
@@ -70,7 +71,6 @@ public class Plugin {
                 String[] p = line.split("= ");
                 properties.put(p[0], p[1]);
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();

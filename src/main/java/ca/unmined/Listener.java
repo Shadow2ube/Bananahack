@@ -84,7 +84,7 @@ public class Listener extends ListenerAdapter implements Component {
                         .setTitle("COVID-19 Cases By Graph:")
                         .setDescription("COVID-19 Rising Per Country By Graph")
                         .clearFields()
-                        .setImage("https://moz.com/cms/_1200x630_crop_center-center_82_none/GuideToLinkBuilding-OG-Title.png?mtime=20210326151847&focal=none&tmtime=20210610115603")
+                        .setImage(Plugin.allTimeGraph)
                         .setTimestamp(Instant.now())
                         .setFooter("Command Executed By: " + event.getUser().getIdLong())
                         .build();
@@ -93,7 +93,7 @@ public class Listener extends ListenerAdapter implements Component {
         return new EmbedBuilder().setColor(Color.RED).setTitle("COVID-19 Cases By Graph:")
                 .setDescription("COVID-19 Rising Per Country By Graph")
                 .clearFields()
-                .setImage("https://moz.com/cms/_1200x630_crop_center-center_82_none/GuideToLinkBuilding-OG-Title.png?mtime=20210326151847&focal=none&tmtime=20210610115603")
+                .setImage(Plugin.allTimeGraph)
                 .setTimestamp(Instant.now())
                 .setFooter("Command Executed By: " + event.getUser().getIdLong())
                 .build();

@@ -75,7 +75,6 @@ public class Util {
         for (Object state : states) {
             jsonValues.add((JSONObject) state);
         }
-
         jsonValues.sort(new Comparator<JSONObject>() {
             private static final String KEY_NAME = "confirmed";
 
@@ -92,8 +91,14 @@ public class Util {
         });
 
         JSONArray out = new JSONArray();
-        for (int i = 0; i < states.size() && i <= amount; i++) {
-            out.add(jsonValues.get(i));
+        if (amount == -1) {
+            for (int i = 0; i < states.size(); i++) {
+                out.add(jsonValues.get(i));
+            }
+        } else if (amount > 0) {
+            for (int i = 0; i < states.size() && i <= amount; i++) {
+                out.add(jsonValues.get(i));
+            }
         }
 
         return out;
@@ -125,5 +130,19 @@ public class Util {
         }
 
         return out;
+    }
+
+    public static String graph(TreeMap<Long, Long> in) {
+        StringBuilder b = new StringBuilder();
+        for (Map.Entry<Long, Long> entry : in.entrySet()) {
+            b.append("%7b")
+                    .append(entry.getKey())
+                    .append(",%20")
+                    .append(entry.getValue())
+                    .append("%7d");
+            if (!entry.getKey().equals(in.lastEntry().getKey())) b.append(',').append("%20");
+        }
+
+        return b.toString();
     }
 }
